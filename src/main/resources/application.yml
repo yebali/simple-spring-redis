@@ -1,0 +1,14 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ""
+
+spring:
+  datasource:
+    url: ${DB_CONNECTION}
+    username: ${DB_USERNAME}
+    password: {DB_PASSWORD}
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    open-in-view: false
