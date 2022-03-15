@@ -33,6 +33,8 @@ dependencies {
     implementation("com.querydsl:querydsl-apt:$querydslVersion")
     implementation("com.querydsl:querydsl-jpa:$querydslVersion")
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
+
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.withType<KotlinCompile> {
