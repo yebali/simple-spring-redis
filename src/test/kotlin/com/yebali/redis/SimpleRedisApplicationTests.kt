@@ -1,10 +1,10 @@
-package com.yebali.template
+package com.yebali.redis
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class TemplateApplicationTests {
+class SimpleRedisApplicationTests {
 
     @Test
     fun contextLoads() {

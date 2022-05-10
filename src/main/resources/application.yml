@@ -9,3 +9,9 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create
+  redis:
+    client-name: simple-redis
+    host: localhost
+    database: 0
+    port: 6379
+    password:
