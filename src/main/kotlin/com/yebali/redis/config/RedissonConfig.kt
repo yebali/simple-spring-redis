@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class RedissonConfig(
-    private val redissonProperties: RedissonProperties,
+    private val redisProperties: RedisProperties,
 ) {
     @Bean
     fun redissonClient(): RedissonClient {
         return Redisson.create(
             Config().apply {
-                this.useSingleServer().address = "redis://${redissonProperties.host}:${redissonProperties.port}"
+                this.useSingleServer().clientName = redisProperties.clientName
+                this.useSingleServer().address = "redis://${redisProperties.host}:${redisProperties.port}"
+                this.useSingleServer().database = redisProperties.database
+                this.useSingleServer().password = null
             }
         )
     }

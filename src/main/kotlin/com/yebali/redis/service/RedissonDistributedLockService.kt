@@ -1,5 +1,6 @@
 package com.yebali.redis.service
 
+import org.redisson.api.RLock
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
@@ -8,17 +9,17 @@ import java.util.concurrent.TimeUnit
 class RedissonDistributedLockService(
     private val redissonClient: RedissonClient,
 ) {
-    fun operateWithLock(operation: () -> Unit) {
-        val lock = redissonClient.getLock("distributed-lock-key")
-
-        if (lock.tryLock(10, TimeUnit.SECONDS)) {
-            try {
-                operation()
-            } finally {
-                lock.unlock()
+    fun <T> operateWithLock(key: String, operation: (RLock) -> T): T {
+        redissonClient.getLock(key).let { rLock ->
+            if (rLock.tryLock(10, TimeUnit.SECONDS)) {
+                try {
+                    return operation(rLock)
+                } finally {
+                    rLock.unlock()
+                }
+            } else {
+                throw Exception("Fail to get Lock")
             }
-        } else {
-            throw Exception("Fail to get Lock")
         }
     }
 }

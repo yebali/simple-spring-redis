@@ -1,13 +1,14 @@
 package com.yebali.redis.service
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalTime
 
 @SpringBootTest
-class RedissonDistributedLockServiceTest{
+class RedissonDistributedLockServiceTest {
     @Autowired
     lateinit var redissonDistributedLockService: RedissonDistributedLockService
 
@@ -15,8 +16,8 @@ class RedissonDistributedLockServiceTest{
     fun testDistributedLock() {
         runBlocking {
             launch {
-                repeat(10) {
-                    redissonDistributedLockService.operateWithLock {
+                repeat(20) {
+                    redissonDistributedLockService.operateWithLock("lock_key") {
                         println("now = ${LocalTime.now()}")
                         Thread.sleep(300)
                     }
