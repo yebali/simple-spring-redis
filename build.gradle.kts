@@ -37,6 +37,7 @@ dependencies {
 
     // Redis
     implementation("org.springframework.data:spring-data-redis")
+    implementation("io.lettuce:lettuce-core:6.1.8.RELEASE")
 
     // Redisson
     implementation("org.redisson:redisson:3.17.1")
