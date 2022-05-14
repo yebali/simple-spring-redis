@@ -5,52 +5,79 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class RedisController(
     private val redisService: RedisService,
 ) {
+
+    /** Insert To Redis */
     @PostMapping("/redis-value")
-    fun saveKeyValue(
+    fun saveValue(
         @RequestBody request: ReqBody
-    ): Int? {
-        return redisService.saveOpsValue(
-            request.key,
-            request.value,
-        )
-    }
+    ) = redisService.saveOpsValue(
+        request.key,
+        request.value,
+    )
 
     @PostMapping("/redis-set")
-    fun saveKeyValueAsSet(
+    fun saveSet(
         @RequestBody request: ReqBody
-    ): Long? {
-        return redisService.saveOpsSet(
-            request.key,
-            request.value,
-        )
-    }
+    ) = redisService.saveOpsSet(
+        request.key,
+        request.value,
+    )
 
+    @PostMapping("/redis-list")
+    fun saveList(
+        @RequestBody request: ReqBody,
+    ) = redisService.saveOpsList(
+        request.key,
+        request.value,
+    )
+
+    @PostMapping("/redis-zset")
+    fun saveZSet(
+        @RequestBody request: ReqBody,
+    ) = redisService.saveOpsZSet(
+        request.key,
+        request.value,
+        request.score,
+    )
+
+    /** Inquiry From Redis*/
     @GetMapping("/redis-value/{key}")
-    fun getKeyValue(
+    fun getValue(
         @PathVariable key: String,
-    ): String {
-        println("redisService.getOpsValue(key) = ${redisService.getOpsValue(key)}")
-        val result = redisService.getOpsSet(key) ?: "null"
-
-        return result
-    }
+    ) = redisService.getOpsValue(key)
 
     @GetMapping("/redis-set/{key}")
-    fun getKeyValueAsSet(
+    fun getSet(
         @PathVariable key: String,
-    ): Set<String>? {
-        println("redisService.getOpsSetMembers(key) = ${redisService.getOpsSetMembers(key)}")
-        return redisService.getOpsSetMembers(key)
-    }
+    ) = redisService.getOpsSet(key)
+
+    @GetMapping("/redis-set-members/{key}")
+    fun getSetMembers(
+        @PathVariable key: String,
+    ) = redisService.getOpsSetMembers(key)
+
+    @GetMapping("/redis-list/{key}")
+    fun getList(
+        @PathVariable key: String,
+        @RequestParam size: Long,
+    ) = redisService.getOpsList(key, size)
+
+    @GetMapping("redis-zset/{key}")
+    fun getZSetMax(
+        @PathVariable key: String,
+        @RequestParam size: Long,
+    ) = redisService.getOpsZSet(key, size)
 
     class ReqBody(
         val key: String,
         val value: String,
+        val score: Double = 0.0,
     )
 }
