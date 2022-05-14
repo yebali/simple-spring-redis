@@ -9,31 +9,21 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @Transactional
 @Rollback(value = false)
-class RedisServiceTest {
+class RedisTransactionTest {
     @Autowired
     lateinit var redisService: RedisService
 
     @Test
     fun occurExceptionWhileRedisTransaction() {
         val keys = listOf("A", "B")
-
         redisService.occurExceptionAfterIncreaseFirstValue(keys)
     }
 
     @Test
     fun occurExceptionAfterRedisTransaction() {
-        val keys = listOf("A", "B")
-
+        val keys = listOf("A", "B", "C")
         redisService.increaseValueInTransaction(keys)
 
-        throw RuntimeException("예외를 던지다.")
-    }
-
-    @Test
-    fun `Redis에서 값 찾기`() {
-        val key = "AA"
-        val value = "ABCD"
-        println("redisService.saveKeyValueAsSet(key, value) = ${redisService.saveOpsSet(key, value)}")
-        println("[In Redis] key:$key, value:${redisService.getOpsSetMembers(key)}")
+        throw RuntimeException("Redis Transaction이 끝난 후 예외를 던지다.")
     }
 }
